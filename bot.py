@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-"""Importing"""
+### Importing
 # Importing External Packages
 from pyrogram import Client
 
@@ -15,7 +15,7 @@ except ModuleNotFoundError:
     from config import Config
 
 
-'''For Displaying Errors&Warnings Better'''
+### For Logs
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -27,7 +27,7 @@ logging.getLogger(
     logging.WARNING
 )
 
-"""Starting Bot"""
+### Starting Bot
 if __name__ == "__main__" :
 
     plugins = dict(

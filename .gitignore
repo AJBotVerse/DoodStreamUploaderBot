@@ -6,3 +6,9 @@ venv
 # Test Files
 testexp
 
+# Cache Files
+__pycache__
+
+# Session File
+DoodStreamUploaderBot.session
+
