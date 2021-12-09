@@ -5,11 +5,12 @@
 # Importing External Packages
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors import exceptions, UserNotParticipant
+from pyrogram.types import Update, Message
 from pymongo import MongoClient
+from requests import get
 
 # Importing Inbuilt Packages
 import __main__
-import asyncio
 from inspect import currentframe
 
 # Importing Credentials & Required Data
@@ -25,7 +26,7 @@ finally:
 if mongoSTR:
     mongo_client = MongoClient(mongoSTR)
     db_user = mongo_client['DoodStream_Uploader']
-    collection_user = db_user['members']
+    collection_api_key = db_user['apiKey']
 
 
 ### Defining Some Functions
@@ -35,7 +36,10 @@ def line_number(fileName, e):
     return f'In {fileName}.py at line {cf.f_back.f_lineno} {e}'
 
 #Checking User whether he joined channel and group or not joined.
-async def search_user_in_community(bot, update):
+async def search_user_in_community(
+    bot : Update,
+    update : Message
+    ):
     try:
         await bot.get_chat_member('@AJPyroVerse', update.chat.id)
         await bot.get_chat_member('@AJPyroVerseGroup', update.chat.id)
@@ -53,3 +57,49 @@ async def search_user_in_community(bot, update):
     else:
         return True
 
+def apiExist(
+    userid : int
+    ):
+    result = collection_api_key.find_one(
+        {
+            'userid' : userid
+        }
+    )
+    if result:
+        return True
+    return
+
+async def isApiValid(
+    apiKey : str,
+    bot : Update,
+    msg : Message
+    ):
+    try:
+        res = get(
+            f"https://doodapi.com/api/account/info?key={apiKey}"
+        )
+    except Exception as e:
+        await bot.send_message(Config.OWNER_ID, line_number("", e))
+        await msg.reply_text(
+            "Something Went Wrong"
+        )
+    else:
+        if res.status_code == 200:
+            responseData = res.json()
+            if responseData['msg'] == 'OK':
+                return True
+            else:
+                await msg.reply_text(
+                    "Api Key is Invalid."
+                )
+        else:
+            await msg.reply_text(
+                "Something Went Wrong"
+            )
+    return
+
+def addApiKey(apiKey, userid):
+    collection_api_key.insert_one({
+        'userid' : userid,
+        'apiKey' : apiKey
+    })
