@@ -66,7 +66,7 @@ def apiExist(
         }
     )
     if result:
-        return True
+        return result
     return
 
 async def isApiValid(
@@ -110,3 +110,8 @@ def removeApiKey(userid):
             'userid' : userid
         }
     )
+
+def uploadRequest(url):
+    res = get(url)
+    print(res.json())
+
