@@ -23,10 +23,9 @@ finally:
 
 
 ### Connecting To Database
-if mongoSTR:
-    mongo_client = MongoClient(mongoSTR)
-    db_user = mongo_client['DoodStream_Uploader']
-    collection_api_key = db_user['apiKey']
+mongo_client = MongoClient(mongoSTR)
+db_user = mongo_client['DoodStream_Uploader']
+collection_api_key = db_user['apiKey']
 
 
 ### Defining Some Functions
