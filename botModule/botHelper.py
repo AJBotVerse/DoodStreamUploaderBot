@@ -103,3 +103,10 @@ def addApiKey(apiKey, userid):
         'userid' : userid,
         'apiKey' : apiKey
     })
+
+def removeApiKey(userid):
+    collection_api_key.delete_one(
+        {
+            'userid' : userid
+        }
+    )
