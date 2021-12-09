@@ -113,5 +113,10 @@ def removeApiKey(userid):
 
 def uploadRequest(url):
     res = get(url)
-    print(res.json())
+    if res.status_code == 200:
+        responseData = res.json()
+        if responseData['msg'] == 'OK':
+            fileID = responseData['result']['filecode']
+            return fileID
+    return
 

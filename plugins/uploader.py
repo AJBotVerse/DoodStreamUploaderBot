@@ -29,7 +29,16 @@ async def urlUploaderHandler(bot:Update, msg:Message):
                     )
             url = url.strip()
             apiUrl += f"&url={url}"
-            uploadRequest(url)
+            fileID = uploadRequest(apiUrl)
+            if fileID:
+                fileurl = f'https://dood.la/e/{fileID}'
+                await msg.reply_text(
+                    f"Your file will be uploaded soon on this url: {fileurl}"
+                )
+            else:
+                await msg.reply_text(
+                    "Something went wrong"
+                )
         else:
             await msg.reply_text(
                 "Your Api is not Added."
