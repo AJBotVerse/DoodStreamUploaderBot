@@ -13,7 +13,7 @@ async def urlUploaderHandler(bot:Update, msg:Message):
         result = apiExist(userid)
         if result:
             apiKey = result['apiKey']
-            apiUrl = f"https://doodapi.com/api/upload/url?key={apiKey}" #&url={upload_url}
+            apiUrl = f"https://doodapi.com/api/upload/url?key={apiKey}"
             message = msg.text
             if '|' in message:
                 url, filename = message.split("|")
@@ -25,23 +25,27 @@ async def urlUploaderHandler(bot:Update, msg:Message):
                 url = msg.text
                 if " " in url:
                     return await msg.reply_text(
-                        "Invalid Url"
+                        "<b>Given URL is Invalid.</b>",
+                        parse_mode = "html"
                     )
             url = url.strip()
             apiUrl += f"&url={url}"
             fileID = uploadRequest(apiUrl)
             if fileID:
-                fileurl = f'https://dood.la/e/{fileID}'
+                fileurl = f'https://dood.la/d/{fileID}'
                 await msg.reply_text(
-                    f"Your file will be uploaded soon on this url: {fileurl}"
+                    f"<b>Your file will be uploaded soon😊 on this url :\n<code>{fileurl}</code></b>",
+                    parse_mode = "html"
                 )
             else:
                 await msg.reply_text(
-                    "Something went wrong"
+                    "<b>😢Unable to upload your file. Something Went Wrong.</b>",
+                    parse_mode = "html"
                 )
         else:
             await msg.reply_text(
-                "Your Api is not Added."
-            )
-        
+                "<b>Your API Key is not Added\nAdd your API Key by using <code>/add APIKEY</code>.</b>",
+                parse_mode = "html"
+            ) 
     return
+

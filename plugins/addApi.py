@@ -17,15 +17,18 @@ async def addApiHandler(bot:Update, msg:Message):
                 if await isApiValid(apiKey, bot, msg):
                     addApiKey(apiKey, userid)
                     await msg.reply_text(
-                        "Api added successful."
+                        "<b>Your API Key has been added successfully🥳🥳.</b>",
+                        parse_mode = "html"
                     )
             else:
                 await msg.reply_text(
-                    "Your Api already added."
+                    "<b>Your API Key is already added🤪.</b>",
+                    parse_mode = "html"
                 )
         else:
             await msg.reply_text(
-                "Invalid Command"
+                "<b>Invalid Command⛔\nSend API Key like this <code>/add APIKEY</code>\n\nIf facing any problem🥲 then ask at😊 @AJPyroVerseGroup</b>",
+                parse_mode = "html"
             )
     return
 

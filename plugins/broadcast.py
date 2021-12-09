@@ -5,6 +5,10 @@
 from botModule.importCommon import *
 
 
+### Global Variable
+fileName = 'broadcast'
+
+
 ### Broadcast Handler
 @Client.on_message(filters.private & filters.command("broadcast"))
 async def broadcast_handler(bot:Update, msg:Message):
@@ -12,9 +16,12 @@ async def broadcast_handler(bot:Update, msg:Message):
         #Extracting Broadcasting Message
         message = msg.text.split('/broadcast ')[1]
     except IndexError:
-        await msg.reply_text("Broadcast can't be empty", parse_mode = 'html')
+        await msg.reply_text(
+            "<b>Broadcast can't be empty.😒</b>",
+            parse_mode = 'html'
+        )
     except Exception as e:
-        await bot.send_message(Config.OWNER_ID, line_number("", e))
+        await bot.send_message(Config.OWNER_ID, line_number(fileName, e))
     else:
         #Getting User`s Id from Database
         for userid in [document['userid'] for document in collection_api_key.find()]:
@@ -25,6 +32,6 @@ async def broadcast_handler(bot:Update, msg:Message):
                 #User Blocked the bot
                 pass
             except Exception as e:
-                await bot.send_message(Config.OWNER_ID, line_number("", e))
+                await bot.send_message(Config.OWNER_ID, line_number(fileName, e))
     return
 

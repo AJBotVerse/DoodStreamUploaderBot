@@ -28,6 +28,10 @@ db_user = mongo_client['DoodStream_Uploader']
 collection_api_key = db_user['apiKey']
 
 
+### Global Varaiable
+fileName = "botHelper"
+
+
 ### Defining Some Functions
 #Function to find error in which file and in which line
 def line_number(fileName, e):
@@ -40,18 +44,46 @@ async def search_user_in_community(
     update : Message
     ):
     try:
-        await bot.get_chat_member('@AJPyroVerse', update.chat.id)
-        await bot.get_chat_member('@AJPyroVerseGroup', update.chat.id)
+        await bot.get_chat_member(
+            '@AJPyroVerse',
+            update.chat.id
+        )
+        await bot.get_chat_member(
+            '@AJPyroVerseGroup',
+            update.chat.id
+        )
     except UserNotParticipant:
-        await update.reply_text("", parse_mode = 'html',reply_markup=InlineKeyboardMarkup([
-        [InlineKeyboardButton('Join our Channel.',url = 'https://t.me/AJPyroVerse')],
-        [InlineKeyboardButton('Join our Group.',url = 'https://t.me/AJPyroVerseGroup')]
-        ]))
+        await update.reply_text(
+            "<b>Seems like you haven't joined our community😢.</b>",
+            parse_mode = 'html',
+            reply_markup = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            'Join our Channel.',
+                            url = 'https://t.me/AJPyroVerse'
+                        )
+                    ],
+                    [
+                        InlineKeyboardButton(
+                            'Join our Group.',
+                            url = 'https://t.me/AJPyroVerseGroup'
+                        )
+                    ]
+                ]
+            )
+        )
         return
     except exceptions.bad_request_400.ChatAdminRequired:
         return True
     except Exception as e:
-        await bot.send_message(Config.OWNER_ID, line_number("", e))
+        await bot.send_message(
+            Config.OWNER_ID,
+            line_number(
+                fileName,
+                e
+            )
+        )
         return True
     else:
         return True
@@ -78,9 +110,16 @@ async def isApiValid(
             f"https://doodapi.com/api/account/info?key={apiKey}"
         )
     except Exception as e:
-        await bot.send_message(Config.OWNER_ID, line_number("", e))
+        await bot.send_message(
+            Config.OWNER_ID,
+            line_number(
+                fileName,
+                e
+            )
+        )
         await msg.reply_text(
-            "Something Went Wrong"
+            "<b>While Checking API Key something went wrong.</b>",
+            parse_mode = "html"
         )
     else:
         if res.status_code == 200:
@@ -89,19 +128,23 @@ async def isApiValid(
                 return True
             else:
                 await msg.reply_text(
-                    "Api Key is Invalid."
+                    "<b>Given API Key is Invalid😒.</b>",
+                    parse_mode = "html"
                 )
         else:
             await msg.reply_text(
-                "Something Went Wrong"
+                "<b>While Checking API Key something went wrong.</b>",
+                parse_mode = "html"
             )
     return
 
 def addApiKey(apiKey, userid):
-    collection_api_key.insert_one({
-        'userid' : userid,
-        'apiKey' : apiKey
-    })
+    collection_api_key.insert_one(
+        {
+            'userid' : userid,
+            'apiKey' : apiKey
+        }
+    )
 
 def removeApiKey(userid):
     collection_api_key.delete_one(
